@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  vulnerable_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.html:/var/www/html/index.html
+      - ./index.php:/var/www/html/index.php
+      - ./.htaccess:/var/www/html/.htaccess
+#      - ./uploads:/var/www/html/uploads
