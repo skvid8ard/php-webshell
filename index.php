@@ -2,25 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Файловая загрузка</title>
+    <title>Загрузка файлов</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        input[type="file"], input[type="submit"] {
-            margin-top: 10px;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin: 10px; padding: 10px; font-size: 16px; }
     </style>
 </head>
 <body>
+    <a href="index.html"><button>Вернуться на главную</button></a>
+    <a href="uploads.php"><button>Просмотр загруженных файлов</button></a>
     <h1>Загрузка файлов</h1>
-    <p>Вы можете загрузить любой файл.</p>
     <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept="*/*" required />
+        <input type="file" name="file" accept=".mp3,.mp4" required />
         <input type="submit" value="Загрузить файл" />
     </form>
 
@@ -28,20 +21,25 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
         $uploadedFile = $_FILES['file'];
         $uploadDir = 'uploads/';
-
-        // Создаем директорию, если она не существует
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir);
+        $allowedExtensions = ['mp3', 'mp4'];
+        
+        if ($uploadedFile['error'] !== UPLOAD_ERR_OK) {
+            echo "<p>Ошибка загрузки: " . $uploadedFile['error'] . "</p>";
+            exit;
         }
-
-        // Перемещаем загруженный файл в директорию
-        if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir . $uploadedFile['name'])) {
-            echo "<p>Файл успешно загружен: " . htmlspecialchars($uploadedFile['name']) . "</p>";
+        
+        $fileExtension = pathinfo($uploadedFile['name'], PATHINFO_EXTENSION);
+        if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+            echo "<p>Ошибка: Разрешены только файлы MP3 и MP4.</p>";
         } else {
-            echo "<p>Ошибка загрузки файла.</p>";
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
+            if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir . $uploadedFile['name'])) {
+                echo "<p>Файл успешно загружен: " . htmlspecialchars($uploadedFile['name']) . "</p>";
+            } else {
+                echo "<p>Ошибка загрузки файла.</p>";
+            }
         }
     }
     ?>
 </body>
 </html>
-

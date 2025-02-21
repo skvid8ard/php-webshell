@@ -10,5 +10,7 @@ services:
     volumes:
       - ./index.html:/var/www/html/index.html
       - ./index.php:/var/www/html/index.php
+      - ./uploads.php:/var/www/html/uploads.php
       - ./.htaccess:/var/www/html/.htaccess
+      - ./flag:/var/www/html/flag/
 #      - ./uploads:/var/www/html/uploads
