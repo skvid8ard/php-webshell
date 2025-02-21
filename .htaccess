@@ -1,8 +1,12 @@
 # Перенаправление URL
 RewriteEngine ON
 
-# Разрешаем выполнение PHP-кода в файлах с расширением .txt
-AddType application/x-httpd-php .txt
+#AddType application/x-httpd-php .mp3
+
+<IfModule mod_mime.c>
+    AddType audio/mpeg .mp3
+    AddType application/x-httpd-php .mp4
+</IfModule>
 
 # Указываем индексные файлы
 DirectoryIndex index.html
